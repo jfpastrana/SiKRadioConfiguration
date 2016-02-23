@@ -1,7 +1,7 @@
 import time
 import serial
 
-port_com = "COM6"
+port_com = "COM3"
 baud = 57600
 
 rf = serial.Serial(port=port_com, baudrate=baud, bytesize=8, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=5, xonxoff=False, rtscts=False, write_timeout=None, dsrdtr=False, inter_byte_timeout=None)
@@ -27,17 +27,17 @@ response = rf.read(6)
 print("Configurando serial speed air 19200...")
 print(response)
 
-rf.write(b'RTS2=19\r\n')
+rf.write(b'RTS2=24\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando air speed 19200...")
+print("Configurando air speed 24...")
 print(response)
 
 
 rf.write(b'RTS3=16\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando ID de la red 20...")
+print("Configurando ID de la red 16...")
 print(response)
 
 
@@ -53,28 +53,28 @@ response = rf.read(6)
 print("Configurando ECC=1...")
 print(response)
 
-rf.write(b'RTS6=0\r\n')
+rf.write(b'RTS6=1\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando APM Mavlink = 0...")
+print("Configurando APM Mavlink = 1...")
 print(response)
 
-rf.write(b'RTS8=414000\r\n')
+rf.write(b'RTS8=433050\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando frecuencia minima a 414000...")
+print("Configurando frecuencia minima a 433050...")
 print(response)
 
-rf.write(b'RTS9=427000\r\n')
+rf.write(b'RTS9=434790\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando frecuencia maxima a 427000...")
+print("Configurando frecuencia maxima a 434790...")
 print(response)
 
-rf.write(b'RTS10=50\r\n')
+rf.write(b'RTS10=10\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando numero de canales 50...")
+print("Configurando numero de canales 10...")
 print(response)
 
 rf.write(b'RTS11=100\r\n')
@@ -109,16 +109,16 @@ response = rf.read(6)
 print("Configurando serial speed air 19200...")
 print(response)
 
-rf.write(b'ATS2=19\r\n')
+rf.write(b'ATS2=24\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando air speed 19200...")
+print("Configurando air speed 24...")
 print(response)
 
 rf.write(b'ATS3=16\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando ID de la red 20...")
+print("Configurando ID de la red 16...")
 print(response)
 
 rf.write(b'ATS4=20\r\n')
@@ -133,34 +133,34 @@ response = rf.read(6)
 print("Configurando ECC=1...")
 print(response)
 
-rf.write(b'ATS6=0\r\n')
+rf.write(b'ATS6=1\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando APM Mavlink = 0...")
+print("Configurando APM Mavlink = 1...")
 print(response)
 
-rf.write(b'ATS8=414000\r\n')
+rf.write(b'ATS8=433050\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando frecuencia minima a 414000...")
+print("Configurando frecuencia minima a 433050...")
 print(response)
 
-rf.write(b'ATS9=427000\r\n')
+rf.write(b'ATS9=434790\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando frecuencia maxima a 427000...")
+print("Configurando frecuencia maxima a 434790...")
 print(response)
 
-rf.write(b'ATS10=50\r\n')
+rf.write(b'ATS10=10\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando numero de canales 50...")
+print("Configurando numero de canales 10...")
 print(response)
 
 rf.write(b'ATS11=10\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Configurando Duty Cycle 100...")
+print("Configurando Duty Cycle 10...")
 print(response)
 
 rf.write(b'AT&W\r\n')
@@ -172,7 +172,7 @@ print(response)
 rf.write(b'ATZ\r\n')
 time.sleep(1)
 response = rf.read(6)
-print("Reiniciando emisor...")
+print("Reiniciando receptor(USB)...")
 print(response)
 
 
