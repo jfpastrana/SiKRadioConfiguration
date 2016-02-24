@@ -8,8 +8,6 @@ config.read('configuration.ini')
 #SERIAL CONFIGURATION
 PORT = config['SERIAL_CONF']['PORT_COM']
 BAUD = config['SERIAL_CONF']['BAUDRATE']
-BYTE = config['SERIAL_CONF']['BYTESIZE']
-TIME = config['SERIAL_CONF']['TIMEOUT']
 
 #RF CONFIGURATION
 SERIAL_SPEED = config['RF_CONF']['SERIAL_SPEED_AIR']
@@ -25,7 +23,7 @@ RT_DC = config['RF_CONF']['RT_DUTY_CYCLE']
 AT_DC = config['RF_CONF']['AT_DUTY_CYCLE']
 
 #PORT CONFIGURATION
-rf = serial.Serial(port=PORT, baudrate=BAUD, bytesize=BYTE, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=TIME, xonxoff=False, rtscts=False, write_timeout=None, dsrdtr=False, inter_byte_timeout=None)
+rf = serial.Serial(port=PORT, baudrate=BAUD, bytesize=8, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=5, xonxoff=False, rtscts=False, write_timeout=None, dsrdtr=False, inter_byte_timeout=None)
 print ("Puerto (%s): %s" % (PORT,rf.portstr))
 
 #START SENDING AT COMMAND
