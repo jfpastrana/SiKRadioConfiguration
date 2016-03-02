@@ -1,6 +1,7 @@
 import time
 import serial
 import configparser
+import binascii
 
 config = configparser.ConfigParser()
 config.read('configuration.ini')
@@ -28,7 +29,7 @@ print ("Puerto (%s): %s" % (PORT,rf.portstr))
 
 #START SENDING AT COMMAND
 time.sleep(0.5)
-rf.write('+++'.encode('utf-8'))
+rf.write(b'+++')
 time.sleep(3)
 response = rf.read(6)
 print("Entrado en modo de configuracion")
@@ -42,70 +43,70 @@ print("Entrado en modo RT...")
 print(response)
 
 command = "RTS1=" + SERIAL_SPEED + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando serial speed air %s..." % SERIAL_SPEED)
 print(response)
 
 command = "RTS2=" + SPEED_AIR + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando air speed %s..." % SPEED_AIR)
 print(response)
 
 command = "RTS3=" + ID + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando ID de la red %s..." % ID)
 print(response)
 
 command = "RTS4=" + DBM + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando potencia %s dBm..." % DBM)
 print(response)
 
 command = "RTS5=" + ECC + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando ECC = %s..." % ECC)
 print(response)
 
 command = "RTS6=" + APM + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando APM Mavlink = $s..." % APM)
 print(response)
 
 command = "RTS8=" + F_MIN + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando frecuencia minima a %s..." % F_MIN)
 print(response)
 
 command = "RTS9=" + F_MAX + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando frecuencia maxima a %s..." % F_MAX)
 print(response)
 
 command = "RTS10=" + CHANNELS + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando numero de canales %s..." % CHANNELS)
 print(response)
 
 command = "RTS11=" + RT_DC + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando Duty Cycle %s..." % RT_DC)
@@ -131,70 +132,70 @@ print("Entrado en modo AT...")
 print(response)
 
 command = "ATS1=" + SERIAL_SPEED + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando serial speed air %s..." % SERIAL_SPEED)
 print(response)
 
 command = "ATS2=" + SPEED_AIR + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando air speed %s..." % SPEED_AIR)
 print(response)
 
 command = "ATS3=" + ID + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando ID de la red %s..." % ID)
 print(response)
 
 command = "ATS4=" + DBM + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando potencia %s dBm..." % DBM)
 print(response)
 
 command = "ATS5=" + ECC + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando ECC = %s..." % ECC)
 print(response)
 
 command = "ATS6=" + APM + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando APM Mavlink = $s..." % APM)
 print(response)
 
 command = "ATS8=" + F_MIN + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando frecuencia minima a %s..." % F_MIN)
 print(response)
 
 command = "ATS9=" + F_MAX + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando frecuencia maxima a %s..." % F_MAX)
 print(response)
 
 command = "ATS10=" + CHANNELS + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando numero de canales %s..." % CHANNELS)
 print(response)
 
 command = "ATS11=" + AT_DC + "\r\n"
-rf.write(command.encode('utf-8'))
+rf.write(binascii.a2b_uu(command))
 time.sleep(1)
 response = rf.read(6)
 print("Configurando Duty Cycle %s..." % RT_DC)
