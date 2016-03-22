@@ -1,217 +1,278 @@
 import time
 import serial
-import configparser
+import ConfigParser
 import binascii
 
-config = configparser.ConfigParser()
+config = ConfigParser.ConfigParser()
 config.read('configuration.ini')
 
 #SERIAL CONFIGURATION
-PORT = config['SERIAL_CONF']['PORT_COM']
-BAUD = config['SERIAL_CONF']['BAUDRATE']
+PORT = config.get('SERIAL_CONF','PORT_COM')
+BAUD = config.get('SERIAL_CONF','BAUDRATE')
 
 #RF CONFIGURATION
-SERIAL_SPEED = config['RF_CONF']['SERIAL_SPEED_AIR']
-SPEED_AIR = config['RF_CONF']['SPEED_AIR']
-ID = config['RF_CONF']['NET_ID']
-DBM = config['RF_CONF']['POWER']
-ECC = config['RF_CONF']['ECC']
-APM = config['RF_CONF']['APM']
-F_MIN = config['RF_CONF']['F_MIN']
-F_MAX = config['RF_CONF']['F_MAX']
-CHANNELS = config['RF_CONF']['CHANNELS']
-RT_DC = config['RF_CONF']['RT_DUTY_CYCLE']
-AT_DC = config['RF_CONF']['AT_DUTY_CYCLE']
+SERIAL_SPEED = config.get('RF_CONF','SERIAL_SPEED_AIR')
+SPEED_AIR = config.get('RF_CONF','SPEED_AIR')
+ID = config.get('RF_CONF','NET_ID')
+DBM = config.get('RF_CONF','POWER')
+ECC = config.get('RF_CONF','ECC')
+APM = config.get('RF_CONF','APM')
+F_MIN = config.get('RF_CONF','F_MIN')
+F_MAX = config.get('RF_CONF','F_MAX')
+CHANNELS = config.get('RF_CONF','CHANNELS')
+RT_DC = config.get('RF_CONF','RT_DUTY_CYCLE')
+AT_DC = config.get('RF_CONF','AT_DUTY_CYCLE')
 
 #PORT CONFIGURATION
 rf = serial.Serial(port=PORT, baudrate=BAUD, bytesize=8, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=5, xonxoff=False, rtscts=False, write_timeout=None, dsrdtr=False, inter_byte_timeout=None)
 print ("Puerto (%s): %s" % (PORT,rf.portstr))
+if rf.is_open:
+    print("Puerto abierto correctamente")
+    print("\tEntrado en modo de configuracion")
+    #START SENDING AT COMMAND
+    time.sleep(0.5)
+    command = "+++"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(3)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-#START SENDING AT COMMAND
-time.sleep(0.5)
-rf.write(b'+++')
-time.sleep(3)
-response = rf.read(6)
-print("Entrado en modo de configuracion")
-print(response)
+    #RT MODE
+    print("\tEntrado en modo RT...")
+    command = "RT\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
+    
+    #SERIAL_SPEED
+    print("Configurando serial speed air %s..." % SERIAL_SPEED)
+    command = "RTS1=" + SERIAL_SPEED + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-#RT MODE
-rf.write(b'RT\r\n')
-time.sleep(1)
-response = rf.read(6)
-print("Entrado en modo RT...")
-print(response)
+    #SPEED_AIR
+    print("Configurando air speed %s..." % SPEED_AIR)
+    command = "RTS2=" + SPEED_AIR + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS1=" + SERIAL_SPEED + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando serial speed air %s..." % SERIAL_SPEED)
-print(response)
+    #NET_ID
+    print("Configurando ID de la red %s..." % ID)
+    command = "RTS3=" + ID + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS2=" + SPEED_AIR + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando air speed %s..." % SPEED_AIR)
-print(response)
+    #POWER
+    print("Configurando potencia %s dBm..." % DBM)
+    command = "RTS4=" + DBM + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS3=" + ID + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando ID de la red %s..." % ID)
-print(response)
+    #ECC
+    print("Configurando ECC = %s..." % ECC)
+    command = "RTS5=" + ECC + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS4=" + DBM + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando potencia %s dBm..." % DBM)
-print(response)
+    #APM
+    print("Configurando APM Mavlink = %s..." % APM)
+    command = "RTS6=" + APM + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS5=" + ECC + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando ECC = %s..." % ECC)
-print(response)
+    #F_MIN
+    print("Configurando frecuencia minima a %s..." % F_MIN)
+    command = "RTS8=" + F_MIN + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS6=" + APM + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando APM Mavlink = $s..." % APM)
-print(response)
+    #F_MAX
+    print("Configurando frecuencia maxima a %s..." % F_MAX)
+    command = "RTS9=" + F_MAX + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS8=" + F_MIN + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando frecuencia minima a %s..." % F_MIN)
-print(response)
+    #CHANNELS
+    print("Configurando numero de canales %s..." % CHANNELS)
+    command = "RTS10=" + CHANNELS + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS9=" + F_MAX + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando frecuencia maxima a %s..." % F_MAX)
-print(response)
+    #RT_DUTY CYCLE
+    print("Configurando Duty Cycle %s..." % RT_DC)
+    command = "RTS11=" + RT_DC + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
+    
+    #WRITE REGISTERS
+    print("Escribiendo en los registros...")
+    command = "RT&W\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS10=" + CHANNELS + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando numero de canales %s..." % CHANNELS)
-print(response)
+    #RESET RT
+    print("Reiniciando emisor...")
+    command = "RTZ\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "RTS11=" + RT_DC + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando Duty Cycle %s..." % RT_DC)
-print(response)
+    #AT MODE
+    print("Entrado en modo AT...")
+    command = "AT\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-rf.write(b'RT&W\r\n')
-time.sleep(1)
-response = rf.read(6)
-print("Escribiendo en los registros...")
-print(response)
+    #SERIAL_SPEED
+    print("Configurando serial speed air %s..." % SERIAL_SPEED)
+    command = "ATS1=" + SERIAL_SPEED + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-rf.write(b'RTZ\r\n')
-time.sleep(1)
-response = rf.read(6)
-print("Reiniciando emisor...")
-print(response)
+    #SPEED_AIR
+    print("Configurando air speed %s..." % SPEED_AIR)
+    command = "ATS2=" + SPEED_AIR + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-#AT MODE
-rf.write(b'AT\r\n')
-time.sleep(1)
-response = rf.read(6)
-print("Entrado en modo AT...")
-print(response)
+    #NET_ID
+    print("Configurando ID de la red %s..." % ID)
+    command = "ATS3=" + ID + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS1=" + SERIAL_SPEED + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando serial speed air %s..." % SERIAL_SPEED)
-print(response)
+    #POWER
+    print("Configurando potencia %s dBm..." % DBM)
+    command = "ATS4=" + DBM + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS2=" + SPEED_AIR + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando air speed %s..." % SPEED_AIR)
-print(response)
+    #ECC
+    print("Configurando ECC = %s..." % ECC)
+    command = "ATS5=" + ECC + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS3=" + ID + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando ID de la red %s..." % ID)
-print(response)
+    #APM
+    print("Configurando APM Mavlink = %s..." % APM)
+    command = "ATS6=" + APM + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS4=" + DBM + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando potencia %s dBm..." % DBM)
-print(response)
+    #F_MIN
+    print("Configurando frecuencia minima a %s..." % F_MIN)
+    command = "ATS8=" + F_MIN + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS5=" + ECC + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando ECC = %s..." % ECC)
-print(response)
+    #F_MAX
+    print("Configurando frecuencia maxima a %s..." % F_MAX)
+    command = "ATS9=" + F_MAX + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS6=" + APM + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando APM Mavlink = $s..." % APM)
-print(response)
+    #CHANNELS
+    print("Configurando numero de canales %s..." % CHANNELS)
+    command = "ATS10=" + CHANNELS + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS8=" + F_MIN + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando frecuencia minima a %s..." % F_MIN)
-print(response)
+    #DUTY CYCLE AT
+    print("Configurando Duty Cycle %s..." % AT_DC)
+    command = "ATS11=" + AT_DC + "\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS9=" + F_MAX + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando frecuencia maxima a %s..." % F_MAX)
-print(response)
+    #WRITTING REGISTER
+    print("Escribiendo en los registros...")
+    command = "AT&W\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS10=" + CHANNELS + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando numero de canales %s..." % CHANNELS)
-print(response)
+    #RESET AT
+    print("Reiniciando receptor(USB)...")
+    command = "ATZ\r\n"
+    command_bytes = command.encode('utf-8')
+    rf.write(command_bytes)
+    time.sleep(2)
+    response = rf.readline()
+    print("\tRespuesta recibida: "+response)
 
-command = "ATS11=" + AT_DC + "\r\n"
-rf.write(binascii.a2b_uu(command))
-time.sleep(1)
-response = rf.read(6)
-print("Configurando Duty Cycle %s..." % RT_DC)
-print(response)
-
-rf.write(b'AT&W\r\n')
-time.sleep(1)
-response = rf.read(6)
-print("Escribiendo en los registros...")
-print(response)
-
-rf.write(b'ATZ\r\n')
-time.sleep(1)
-response = rf.read(6)
-print("Reiniciando receptor(USB)...")
-print(response)
-
-#CLOSING PORT
-rf.close()
+    #CLOSING PORT
+    rf.close()
+else:
+    print("Puerto no abierto");
