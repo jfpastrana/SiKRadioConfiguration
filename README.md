@@ -1,20 +1,16 @@
 # SiKRadioConfiguration
 Configuration of 3DR SiK Radio Telemetry sending AT COMMAND through serial port
 
+	Windows configuration
+		1ยบ Download lastest Python version. (2.X VERSION)
+			https://www.python.org/downloads/
 
-				Windows configuration
+		2ยบ Install pySerial library.
+			https://pypi.python.org/pypi/pyserial
 
-1บ Download lastest Python version. (2.X VERSION)
-https://www.python.org/downloads/
+	Linux configuration
+		sudo apt-get install python python-serial (2.X VERSION)
 
-2บ Install pySerial library.
-https://pypi.python.org/pypi/pyserial
-
-
-				Linux configuration
-
-sudo apt-get install python python-serial (2.X VERSION)
-
-				Documentation
-pySerial API.
-http://pyserial.readthedocs.org/en/latest/pyserial_api.html#classes  
+	Documentation
+		pySerial API.
+			http://pyserial.readthedocs.org/en/latest/pyserial_api.html#classes  
